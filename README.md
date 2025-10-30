@@ -1,63 +1,50 @@
+# Deployment Guidelines
 
-<h1 align="center">
-  <br>
-  <a href="https://github.com/s0md3v/Hash-Buster"><img src="https://image.ibb.co/bSwkMe/bitmap.png" alt="Hash Buster"></a>
-  <br>
-  Hash Buster
-  <br>
-</h1>
+## Overview
+This document provides standard deployment guidelines for all repositories in our organization. It is automatically updated across all repositories to maintain consistency.
 
-<h4 align="center">Why crack hashes when you can bust them?</h4>
+## Deployment Process
 
-<p align="center">
-  <a href="https://github.com/s0md3v/Hash-Buster/releases">
-    <img src="https://img.shields.io/github/release/s0md3v/Hash-Buster.svg">
-  </a>
-  <a href="https://github.com/s0md3v/Hash-Buster/issues?q=is%3Aissue+is%3Aclosed">
-      <img src="https://img.shields.io/github/issues-closed-raw/s0md3v/Hash-Buster.svg">
-  </a>
-</p>
+### Prerequisites
+- Ensure all tests pass in the CI pipeline
+- Code review has been completed and approved
+- Version number has been updated according to semantic versioning
 
-![demo](https://image.ibb.co/fnXWBe/Screenshot_2018_09_20_14_02_05.png)
+### Deployment Steps
+1. Create a release branch from develop: `git checkout -b release/vX.X.X develop`
+2. Run final tests: `npm test` or `pytest`
+3. Update version numbers in appropriate files
+4. Commit version changes: `git commit -am "Bump version to X.X.X"`
+5. Merge to main branch:
+   ```bash
+   git checkout main
+   git merge --no-ff release/vX.X.X
+   git tag -a vX.X.X -m "Version X.X.X"
+   ```
+6. Push changes and tags: `git push && git push --tags`
+7. Deploy to production using the CI/CD pipeline
 
-## Features
-- Automatic hash type identification
-- Supports MD5, SHA1, SHA256, SHA384, SHA512
-- Can extract & crack hashes from a file
-- Can find hashes from a directory, recursively
-- Multi-threading
+## Post-Deployment
+- Monitor application metrics for any anomalies
+- Verify that all features are working as expected
+- Update the changelog and release notes
 
-## Insallation & Usage
-> **Note:** Hash Buster isn't compatible with python2, run it with python3 instead.
-> Also, Hash-Buster uses some APIs for hash lookups, check the source code if you are paranoid.
+## Rollback Procedure
+If issues are detected in the production environment:
 
-Hash-Buster can be run directly from the python script but I highly suggest you to install it with `make install`
+1. Identify the source of the problem
+2. Decide whether to fix forward or rollback
+3. If rolling back:
+   ```bash
+   git checkout main
+   git revert [problematic commit]
+   git push
+   ```
+4. Deploy the previous stable version
 
-After the installation, you will be able to access it with `buster` command.
+## Contact Information
+For deployment issues or questions, contact the DevOps team at devops@example.com
 
-### Cracking a single hash
+---
 
-You don't need to specify the hash type. Hash Buster will identify and *crack* it under 3 seconds.
-
-**Usage:** `buster -s <hash>`
-### Finding hashes from a directory
-
-Yep, just specify a directory and Hash Buster will go through all the files and directories present in it, looking for hashes.
-
-**Usage:** `buster -d /root/Documents`
-### Cracking hashes from a file
-
-Hash Buster can find your hashes even if they are stored in a file like this
-```
-simple@gmail.com:21232f297a57a5a743894a0e4a801fc3
-{"json@gmail.com":"d033e22ae348aeb5660fc2140aec35850c4da997"}
-surrondedbytext8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918surrondedbytext
-```
-
-**Usage:** `buster -f /root/hashes.txt`
-
-### Specifiying number of threads
-
-Multi-threading can incredibly minimize the overall speed when you have a lot of hashes to crack by making requests in parallel.
-
-`buster -f /root/hashes.txt -t 10`
+*This is an automated document managed by our markdown automation system. Do not edit manually.*
