@@ -1,10 +1,9 @@
-# Environment Variables Used in Hash-Cracker
+# Environment Variables Report
+Scanned Branch: **main**
 
-Scanned branch: `main`
-
-## Variables Found
-- `1`
-- `256`
-- `384`
-- `5`
-- `512`
+## /home/runner/work/markdown-automation/markdown-automation/scripts/scan_envs.py
+- `TARGET_BRANCH`
+- `encoding`
+- `errors`
+- `format`
+- `main`
